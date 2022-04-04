@@ -10,11 +10,16 @@ inputs:
   max_timeout:
     description: "The max time to wait after the deployment is ready for a valid HTTP status code."
     required: false
+  base_path:
+    description: "The path to test against. Defaults to /"
+    required: false
 outputs:
   deploy_id:
     description: "The Netlify deployment ID"
   url:
-    description: "The fully qualified deployment URL"
+    description: "The qualified deployment URL, without base_path"
+  full_url:
+    description: "The fully qualified deployment URL, with base_path"
 runs:
   using: "node12"
   main: "index.js"

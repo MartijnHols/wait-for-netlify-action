@@ -98,6 +98,7 @@ const run = async () => {
     const MAX_WAIT_TIMEOUT = 60 * 15; // 15 min
     const MAX_READY_TIMEOUT = Number(core.getInput('max_timeout')) || 60;
     const siteId = core.getInput('site_id');
+    const basePath = core.getInput('base_path') || '/';
 
     if (!netlifyToken) {
       core.setFailed('Please set NETLIFY_TOKEN env variable to your Netlify Personal Access Token secret');
@@ -116,10 +117,12 @@ const run = async () => {
       MAX_CREATE_TIMEOUT
     );
 
-    const url = `https://${commitDeployment.id}--${commitDeployment.name}.netlify.app`;
+    const domain = `https://${commitDeployment.id}--${commitDeployment.name}.netlify.app`
+    const url = `${domain}${basePath}`;
 
     core.setOutput('deploy_id', commitDeployment.id);
-    core.setOutput('url', url);
+    core.setOutput('url', domain);
+    core.setOutput('full_url', url);
 
     console.log(`Waiting for Netlify deployment ${commitDeployment.id} in site ${commitDeployment.name} to be ready`);
     await waitForReadiness(
